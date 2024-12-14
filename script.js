@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
 - Total de gorditas: ${totalQuantity} gordita(s)
 - Total a pagar: $${totalMoney}
 
-¡Gracias por su preferencia.! 🙌🏼`;
+¡Gracias! 🙌🏼`;
 
             // Codificar el mensaje para URL
             const whatsappURL = `https://wa.me/524411156678?text=${encodeURIComponent(orderMessage)}`;

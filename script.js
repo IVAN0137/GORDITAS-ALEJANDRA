@@ -81,7 +81,7 @@ function sendOrder() {
       const cantidad = order[guiso];
       const subtotal = cantidad * pricePerGordita;
       total += subtotal;
-      orderDetails += `- ${guiso}: ${cantidad} x $${pricePerGordita} = $${subtotal}\n`;
+      orderDetails += `- ${cantidad}: ${guiso} = $${subtotal}\n`;
     }
   
     // Formatear el mensaje
@@ -98,23 +98,12 @@ function sendOrder() {
     // Enviar el mensaje a WhatsApp
     const whatsappURL = `https://wa.me/524411156678?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, '_blank');
-  }
-  
+}
 
 // Event listeners para los botones de agregar y quitar
 document.querySelectorAll('.add').forEach(button => {
-  button.addEventListener('click', () => {
-    const guiso = button.getAttribute('data-guiso');
-    addProduct(guiso);
-  });
+  button.addEventListener('click', () => addProduct(button.dataset.guiso));
 });
 
-document.querySelectorAll('.remove').forEach(button => {
-  button.addEventListener('click', () => {
-    const guiso = button.getAttribute('data-guiso');
-    removeProduct(guiso);
-  });
-});
-
-// Event listener para enviar el pedido
+// Enviar el pedido cuando se haga clic en el botón
 sendOrderButton.addEventListener('click', sendOrder);

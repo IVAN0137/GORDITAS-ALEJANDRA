@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
             orderMessage += `\nTotal de gorditas: ${orderDetails.total}`;
 
             // Codificar el mensaje para URL
-            const whatsappURL = `https://wa.me/?text=${encodeURIComponent(orderMessage)}`;
+            const whatsappURL = `https://wa.me/524411156678?text=${encodeURIComponent(orderMessage)}`;
 
             // Abrir WhatsApp con el mensaje
             window.open(whatsappURL, "_blank");

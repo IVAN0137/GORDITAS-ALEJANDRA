@@ -65,26 +65,28 @@ document.addEventListener("DOMContentLoaded", function() {
         const deliveryType = document.getElementById("delivery-type").value;
 
         if (name && deliveryType && Object.keys(order).length > 0) {
-            const orderDetails = {
-                name,
-                deliveryType,
-                order,
-                total: Object.values(order).reduce((a, b) => a + b, 0) * 20, // Total en dinero
-            };
+            const totalQuantity = Object.values(order).reduce((a, b) => a + b, 0); // Total en cantidad de gorditas
+            const totalMoney = totalQuantity * 20; // Total en dinero
 
-            // Crear el mensaje para WhatsApp
+            // Crear el mensaje para WhatsApp con un tono más casual y directo
             let orderMessage = `
-                Pedido de Gorditas:
-                Nombre: ${orderDetails.name}
-                Tipo de entrega: ${orderDetails.deliveryType}
-                Guisos seleccionados:
+                ¡Hola! 🙌🏻
+                Soy ${name} y me gustaría pedir unas gorditas para ${deliveryType}.
+                
+                Aquí te dejo lo que quiero:
             `;
 
-            for (let guiso in orderDetails.order) {
-                orderMessage += `\n${guiso} - Cantidad: ${orderDetails.order[guiso]}`;
+            // Agregar los guisos y su cantidad al mensaje
+            for (let guiso in order) {
+                orderMessage += `\n- ${guiso}: ${order[guiso]} gordita(s)`;
             }
 
-            orderMessage += `\nTotal de gorditas: ${orderDetails.total}`;
+            // Agregar los totales al mensaje
+            orderMessage += `\n\nResumen:
+- Total de gorditas: ${totalQuantity} gordita(s)
+- Total a pagar: $${totalMoney}
+
+¡Gracias! 🙌🏼`;
 
             // Codificar el mensaje para URL
             const whatsappURL = `https://wa.me/524411156678?text=${encodeURIComponent(orderMessage)}`;

@@ -46,6 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
             order[guiso] = 1; // Si no está, agregarlo con cantidad 1
         }
         updateOrderSummary();
+        updateCounters(); // Actualizar los contadores de guisos en el menú
     }
 
     // Función para quitar un guiso
@@ -56,7 +57,33 @@ document.addEventListener("DOMContentLoaded", function() {
                 delete order[guiso]; // Si la cantidad llega a 0, eliminarlo
             }
             updateOrderSummary();
+            updateCounters(); // Actualizar los contadores de guisos en el menú
         }
+    }
+
+    // Función para actualizar los contadores en el menú
+    function updateCounters() {
+        // Actualizar los contadores en el menú de guisos
+        document.querySelectorAll(".menu-item").forEach(item => {
+            const guiso = item.querySelector(".add").getAttribute("data-guiso");
+            const counter = item.querySelector(".counter");
+            if (order[guiso]) {
+                counter.textContent = order[guiso];
+            } else {
+                counter.textContent = "0";
+            }
+        });
+
+        // Actualizar los contadores en el menú de combos
+        document.querySelectorAll(".combo-item").forEach(item => {
+            const guiso = item.querySelector(".add").getAttribute("data-guiso");
+            const counter = item.querySelector(".counter");
+            if (order[guiso]) {
+                counter.textContent = order[guiso];
+            } else {
+                counter.textContent = "0";
+            }
+        });
     }
 
     // Función para enviar el pedido a WhatsApp
@@ -86,7 +113,7 @@ document.addEventListener("DOMContentLoaded", function() {
 - Total de gorditas: ${totalQuantity} gordita(s)
 - Total a pagar: $${totalMoney}
 
-¡Gracias! 🙌🏼`;
+¡Gracias por su preferencia.! 🙌🏼`;
 
             // Codificar el mensaje para URL
             const whatsappURL = `https://wa.me/524411156678?text=${encodeURIComponent(orderMessage)}`;
@@ -121,4 +148,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Evento para el botón de enviar el pedido a WhatsApp
     sendOrderButton.addEventListener("click", sendOrderToWhatsApp);
+
+    // Inicializar los contadores
+    updateCounters();
 });

@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pedido de Gorditas</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 
-  <!-- FontAwesome para iconos -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- FontAwesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-  <!-- Animate.css para animaciones -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-      <link rel="stylesheet" href="styles.css">
+    <!-- Animate.css para animaciones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -23,55 +23,85 @@
         </header>
 
         <div class="menu">
+            <h2>Elige tus Guisos</h2>
             <div class="menu-item">
-                <button class="add" data-guiso="Bisteck">Bisteck</button>
+                <span>Bisteck</span>
+                <button class="add" data-guiso="Bisteck">Agregar</button>
+                <button class="remove" data-guiso="Bisteck">Quitar</button>
             </div>
             <div class="menu-item">
-                <button class="add" data-guiso="Chicharrón">Chicharrón</button>
+                <span>Chicharrón</span>
+                <button class="add" data-guiso="Chicharrón">Agregar</button>
+                <button class="remove" data-guiso="Chicharrón">Quitar</button>
             </div>
             <div class="menu-item">
-                <button class="add" data-guiso="Carnitas">Carnitas</button>
+                <span>Carnitas</span>
+                <button class="add" data-guiso="Carnitas">Agregar</button>
+                <button class="remove" data-guiso="Carnitas">Quitar</button>
             </div>
             <div class="menu-item">
-                <button class="add" data-guiso="Barbacoa">Barbacoa</button>
+                <span>Barbacoa</span>
+                <button class="add" data-guiso="Barbacoa">Agregar</button>
+                <button class="remove" data-guiso="Barbacoa">Quitar</button>
             </div>
             <div class="menu-item">
-                <button class="add" data-guiso="Longaniza">Longaniza</button>
+                <span>Longaniza</span>
+                <button class="add" data-guiso="Longaniza">Agregar</button>
+                <button class="remove" data-guiso="Longaniza">Quitar</button>
             </div>
             <div class="menu-item">
-                <button class="add" data-guiso="Pollo">Pollo</button>
+                <span>Pollo</span>
+                <button class="add" data-guiso="Pollo">Agregar</button>
+                <button class="remove" data-guiso="Pollo">Quitar</button>
             </div>
         </div>
 
         <div class="combos">
             <h2>Gorditas Combinadas</h2>
             <div class="combo-item">
-                <button class="add" data-guiso="Bisteck con Nopales">Bisteck con Nopales</button>
+                <span>Bisteck con Nopales</span>
+                <button class="add" data-guiso="Bisteck con Nopales">Agregar</button>
+                <button class="remove" data-guiso="Bisteck con Nopales">Quitar</button>
             </div>
             <div class="combo-item">
-                <button class="add" data-guiso="Chicharrón con Nopales">Chicharrón con Nopales</button>
+                <span>Chicharrón con Nopales</span>
+                <button class="add" data-guiso="Chicharrón con Nopales">Agregar</button>
+                <button class="remove" data-guiso="Chicharrón con Nopales">Quitar</button>
             </div>
             <div class="combo-item">
-                <button class="add" data-guiso="Carnitas con Nopales">Carnitas con Nopales</button>
+                <span>Carnitas con Nopales</span>
+                <button class="add" data-guiso="Carnitas con Nopales">Agregar</button>
+                <button class="remove" data-guiso="Carnitas con Nopales">Quitar</button>
             </div>
             <div class="combo-item">
-                <button class="add" data-guiso="Barbacoa con Nopales">Barbacoa con Nopales</button>
+                <span>Barbacoa con Nopales</span>
+                <button class="add" data-guiso="Barbacoa con Nopales">Agregar</button>
+                <button class="remove" data-guiso="Barbacoa con Nopales">Quitar</button>
             </div>
             <div class="combo-item">
-                <button class="add" data-guiso="Longaniza con Nopales">Longaniza con Nopales</button>
+                <span>Longaniza con Nopales</span>
+                <button class="add" data-guiso="Longaniza con Nopales">Agregar</button>
+                <button class="remove" data-guiso="Longaniza con Nopales">Quitar</button>
             </div>
             <div class="combo-item">
-                <button class="add" data-guiso="Pollo con Nopales">Pollo con Nopales</button>
+                <span>Pollo con Nopales</span>
+                <button class="add" data-guiso="Pollo con Nopales">Agregar</button>
+                <button class="remove" data-guiso="Pollo con Nopales">Quitar</button>
             </div>
         </div>
 
         <div class="order-summary">
             <h2>Resumen del Pedido</h2>
             <ul id="order-list"></ul>
-            <p class="total">Total: <span id="total-count">$0</span></p>
+            <p class="total">Total de gorditas: <span id="total-count">0</span></p>
+            <p class="total-price">Total: <span id="total-price">$0</span></p> <!-- Total en dinero -->
+            <p class="total-general">Total general: <span id="total-general">0 gorditas - Total: $0</span></p> <!-- Total general -->
+            
+            
         </div>
 
         <div class="user-info">
+            <h2>Detalles del Pedido</h2>
             <label for="name">Nombre:</label>
             <input type="text" id="name" placeholder="Ingresa tu nombre">
             
@@ -85,6 +115,10 @@
 
         <button id="send-order">Enviar Pedido</button>
     </div>
+
+    <footer>
+        <p>© 2024 Gorditas MX | Todos los derechos reservados</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>

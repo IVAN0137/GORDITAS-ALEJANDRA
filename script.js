@@ -1,109 +1,122 @@
-const nameInput = document.getElementById('name');
-const deliveryTypeSelect = document.getElementById('delivery-type');
-const orderList = document.getElementById('order-list');
-const totalCount = document.getElementById('total-count');
-const sendOrderButton = document.getElementById('send-order');
+document.addEventListener("DOMContentLoaded", function() {
+    // Variables para manejar el pedido y el total
+    const orderList = document.getElementById("order-list");
+    const totalCount = document.getElementById("total-count");
+    const totalPrice = document.getElementById("total-price"); // Para mostrar el total en dinero
+    const totalGeneral = document.getElementById("total-general"); // Total general
+    const sendOrderButton = document.getElementById("send-order");
 
-const pricePerGordita = 20;
-const order = {};
+    // Almacenar los guisos seleccionados y sus cantidades
+    let order = {};
 
-// Función para agregar un producto
-function addProduct(guiso) {
-  if (!order[guiso]) {
-    order[guiso] = 0;
-  }
-  order[guiso]++;
-  updateOrderList();
-  animateProductChange(guiso, 'add');
-}
+    // Función para actualizar el resumen del pedido
+    function updateOrderSummary() {
+        // Limpiar el listado de pedidos
+        orderList.innerHTML = "";
 
-// Función para quitar un producto
-function removeProduct(guiso) {
-  if (order[guiso] && order[guiso] > 0) {
-    order[guiso]--;
-    if (order[guiso] === 0) delete order[guiso];
-    updateOrderList();
-    animateProductChange(guiso, 'remove');
-  }
-}
+        let total = 0; // Inicializamos el total en 0
+        let totalGorditas = 0; // Para el total en dinero
 
-// Función para actualizar la lista de pedidos
-function updateOrderList() {
-  orderList.innerHTML = '';
-  let total = 0;
-  for (const guiso in order) {
-    const cantidad = order[guiso];
-    const subtotal = cantidad * pricePerGordita;
-    total += subtotal;
+        // Mostrar los elementos seleccionados
+        for (let guiso in order) {
+            const li = document.createElement("li");
+            li.textContent = `${guiso} - Cantidad: ${order[guiso]}`;
+            orderList.appendChild(li);
 
-    const li = document.createElement('li');
-    li.classList.add('order-item');
-    li.textContent = `${guiso} x${cantidad} = $${subtotal}`;
-    orderList.appendChild(li);
-  }
-  totalCount.textContent = `$${total}`;
-}
+            // Actualizar el total de gorditas
+            total += order[guiso]; // Contar el total de gorditas
+            totalGorditas += order[guiso] * 20; // El total en dinero, 20 por cada gordita
+        }
 
-// Función para animar el cambio de productos
-function animateProductChange(guiso, action) {
-  const productButton = document.querySelector(`[data-guiso="${guiso}"]`);
-  if (productButton) {
-    productButton.classList.add(action === 'add' ? 'animate-add' : 'animate-remove');
-    setTimeout(() => productButton.classList.remove('animate-add', 'animate-remove'), 500);
-  }
-}
+        // Actualizar el total de gorditas
+        totalCount.textContent = total;
 
-// Función para enviar el pedido a WhatsApp
-function sendOrder() {
-    const name = nameInput.value.trim();
-    const deliveryType = deliveryTypeSelect.value;
-  
-    if (!name) {
-      alert('Por favor, ingresa tu nombre.');
-      return;
+        // Actualizar el total en dinero
+        totalPrice.textContent = `$${totalGorditas}`;
+
+        // Mostrar el total general
+        totalGeneral.textContent = `${total} gorditas - Total: $${totalGorditas}`;
     }
-  
-    if (!deliveryType) {
-      alert('Por favor, selecciona el tipo de entrega.');
-      return;
-    }
-  
-    if (Object.keys(order).length === 0) {
-      alert('Por favor, selecciona al menos un producto.');
-      return;
-    }
-  
-    // Generar el texto del pedido
-    let orderDetails = '';
-    let total = 0;
-  
-    for (const guiso in order) {
-      const cantidad = order[guiso];
-      const subtotal = cantidad * pricePerGordita;
-      total += subtotal;
-      orderDetails += `- ${cantidad}: ${guiso} = $${subtotal}\n`;
-    }
-  
-    // Formatear el mensaje
-    const message = `
-  Hola, soy ${name}.
-  Quisiera realizar el siguiente pedido:
-  ${orderDetails}
-  Total: $${total}
-  
-  Tipo de entrega: ${deliveryType === 'entrega' ? 'Entrega a domicilio' : 'Pasaré a recoger'}.
-  ¡Gracias!
-  `;
-  
-    // Enviar el mensaje a WhatsApp
-    const whatsappURL = `https://wa.me/524411156678?text=${encodeURIComponent(message)}`;
-    window.open(whatsappURL, '_blank');
-}
 
-// Event listeners para los botones de agregar y quitar
-document.querySelectorAll('.add').forEach(button => {
-  button.addEventListener('click', () => addProduct(button.dataset.guiso));
+    // Función para agregar un guiso
+    function addItemToOrder(guiso) {
+        if (order[guiso]) {
+            order[guiso] += 1; // Si ya está en el pedido, aumentar la cantidad
+        } else {
+            order[guiso] = 1; // Si no está, agregarlo con cantidad 1
+        }
+        updateOrderSummary();
+    }
+
+    // Función para quitar un guiso
+    function removeItemFromOrder(guiso) {
+        if (order[guiso]) {
+            order[guiso] -= 1; // Disminuir la cantidad
+            if (order[guiso] === 0) {
+                delete order[guiso]; // Si la cantidad llega a 0, eliminarlo
+            }
+            updateOrderSummary();
+        }
+    }
+
+    // Función para enviar el pedido a WhatsApp
+    function sendOrderToWhatsApp() {
+        const name = document.getElementById("name").value;
+        const deliveryType = document.getElementById("delivery-type").value;
+
+        if (name && deliveryType && Object.keys(order).length > 0) {
+            const orderDetails = {
+                name,
+                deliveryType,
+                order,
+                total: Object.values(order).reduce((a, b) => a + b, 0) * 20, // Total en dinero
+            };
+
+            // Crear el mensaje para WhatsApp
+            let orderMessage = `
+                Pedido de Gorditas:
+                Nombre: ${orderDetails.name}
+                Tipo de entrega: ${orderDetails.deliveryType}
+                Guisos seleccionados:
+            `;
+
+            for (let guiso in orderDetails.order) {
+                orderMessage += `\n${guiso} - Cantidad: ${orderDetails.order[guiso]}`;
+            }
+
+            orderMessage += `\nTotal de gorditas: ${orderDetails.total}`;
+
+            // Codificar el mensaje para URL
+            const whatsappURL = `https://wa.me/?text=${encodeURIComponent(orderMessage)}`;
+
+            // Abrir WhatsApp con el mensaje
+            window.open(whatsappURL, "_blank");
+
+            // Limpiar el pedido
+            order = {};
+            updateOrderSummary();
+            document.getElementById("name").value = '';
+            document.getElementById("delivery-type").value = '';
+        } else {
+            alert("Por favor, completa todos los campos del pedido.");
+        }
+    }
+
+    // Eventos para los botones de agregar y quitar
+    document.querySelectorAll(".add").forEach(button => {
+        button.addEventListener("click", function() {
+            const guiso = this.getAttribute("data-guiso");
+            addItemToOrder(guiso);
+        });
+    });
+
+    document.querySelectorAll(".remove").forEach(button => {
+        button.addEventListener("click", function() {
+            const guiso = this.getAttribute("data-guiso");
+            removeItemFromOrder(guiso);
+        });
+    });
+
+    // Evento para el botón de enviar el pedido a WhatsApp
+    sendOrderButton.addEventListener("click", sendOrderToWhatsApp);
 });
-
-// Enviar el pedido cuando se haga clic en el botón
-sendOrderButton.addEventListener('click', sendOrder);

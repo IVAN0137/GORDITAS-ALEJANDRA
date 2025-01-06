@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Almacenar los guisos seleccionados y sus cantidades
     let order = {};
+    let customerLocation = ""; // Variable para almacenar la ubicación del cliente
 
     // Función para actualizar el resumen del pedido
     function updateOrderSummary() {
@@ -86,6 +87,24 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
+    // Función para obtener la ubicación del cliente
+    function getCustomerLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+
+                // Crear un link a Google Maps con la ubicación
+                customerLocation = `https://www.google.com/maps?q=${lat},${lon}`;
+                alert("Ubicación obtenida correctamente.");
+            }, function() {
+                alert("No se pudo obtener la ubicación. Por favor, habilita la geolocalización.");
+            });
+        } else {
+            alert("Tu navegador no soporta la geolocalización.");
+        }
+    }
+
     // Función para enviar el pedido a WhatsApp
     function sendOrderToWhatsApp() {
         const name = document.getElementById("name").value;
@@ -111,9 +130,15 @@ document.addEventListener("DOMContentLoaded", function() {
             // Agregar los totales al mensaje
             orderMessage += `\n\nResumen:
 - Total de gorditas: ${totalQuantity} gordita(s)
-- Total a pagar: $${totalMoney}
+- Total a pagar: $${totalMoney}`;
 
-¡Gracias! 🙌🏼`;
+            // Si el tipo de entrega es "Entrega a domicilio", agregar la ubicación
+            if (deliveryType === "Entregar a domicilio porfavor.") {
+                orderMessage += `\n\nUbicación del cliente: ${customerLocation}`;
+            }
+
+            // Agregar un mensaje de agradecimiento
+            orderMessage += `\n\n¡Gracias! 🙌🏼`;
 
             // Codificar el mensaje para URL
             const whatsappURL = `https://wa.me/524412822828?text=${encodeURIComponent(orderMessage)}`;
@@ -123,6 +148,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
             // Limpiar el pedido
             order = {};
+            customerLocation = ""; // Limpiar ubicación
             updateOrderSummary();
             document.getElementById("name").value = '';
             document.getElementById("delivery-type").value = '';
@@ -148,6 +174,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Evento para el botón de enviar el pedido a WhatsApp
     sendOrderButton.addEventListener("click", sendOrderToWhatsApp);
+
+    // Evento para detectar cuando el tipo de entrega cambia
+    document.getElementById("delivery-type").addEventListener("change", function() {
+        if (this.value === "Entregar a domicilio porfavor.") {
+            getCustomerLocation(); // Pedir la ubicación cuando el usuario elige "Entrega a domicilio"
+        }
+    });
 
     // Inicializar los contadores
     updateCounters();
